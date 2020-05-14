@@ -1,4 +1,15 @@
-import { schemas } from "web/sections/schemas";
+const sectionContext = require.context(
+  "web/sections",
+  false,
+  /\.(js|jsx|ts|tsx)$/
+);
+
+const sectionTypes = sectionContext.keys().map((filename) => {
+  const parts = filename.split("./")[1].split(".");
+  parts.splice(-1, 1);
+  const name = parts.join(".");
+  return { type: name };
+});
 
 export default {
   name: "page",
@@ -10,7 +21,7 @@ export default {
       name: "blocks",
       title: "blocks",
       type: "array",
-      of: Object.keys(schemas).map((sectionName) => ({ type: sectionName })),
+      of: sectionTypes,
     },
   ],
 };

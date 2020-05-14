@@ -1,7 +1,22 @@
 /** @jsx jsx */
 import { jsx } from "@theme-ui/core";
 import { Fragment } from "react";
-import { components } from "web/sections/components";
+
+const sectionContext = require.context(
+  "web/sections",
+  false,
+  /\.(js|jsx|ts|tsx)$/
+);
+
+const components = Object.fromEntries(
+  sectionContext.keys().map((filename) => {
+    const parts = filename.split("./")[1].split(".");
+    parts.splice(-1, 1);
+    const name = parts.join(".");
+    const component = sectionContext(filename).default;
+    return [name, component];
+  })
+);
 
 function Blocks({ blocks }) {
   return (
